@@ -1,74 +1,46 @@
-from transitions import Machine
 import tkinter as tk
 from tkinter import messagebox
+from transitions import Machine
 
-class DroneStateMachine(object):
-    states = ['idle', 'navigating', 'obstacle_detected', 'low_battery', 'emergency_location_changed', 'landing', 'dealing_with_emergency']
+class DroneStateMachine:
+    states = ['en tierra', 'navegando', 'detectando obstáculos', 'batería baja', 'en emergencia']
 
     def __init__(self):
-        self.machine = Machine(model=self, states=DroneStateMachine.states, initial='idle')
+        self.machine = Machine(model=self, states=DroneStateMachine.states, initial='en tierra')
+        self.machine.add_transition('iniciar_vuelo', 'en tierra', 'navegando')
+        self.machine.add_transition('detectar_obstáculo', 'navegando', 'detectando obstáculos')
+        self.machine.add_transition('batería_baja', '*', 'batería baja')
+        self.machine.add_transition('emergencia', '*', 'en emergencia')
+        self.machine.add_transition('aterrizar', '*', 'en tierra')
 
-        # Definir transiciones
-        self.machine.add_transition('start_flight', 'idle', 'navigating')
-        self.machine.add_transition('detect_obstacle', 'navigating', 'obstacle_detected')
-        self.machine.add_transition('low_battery_alert', '*', 'low_battery')
-        self.machine.add_transition('change_emergency_location', '*', 'emergency_location_changed')
-        self.machine.add_transition('land', ['navigating', 'obstacle_detected', 'low_battery', 'emergency_location_changed'], 'landing')
-        self.machine.add_transition('deal_with_emergency', 'landing', 'dealing_with_emergency')
-        self.machine.add_transition('reset', '*', 'idle')
-
-        # Agregar callbacks para entrar y salir de estados
-        self.on_enter_idle = self.on_enter_idle_callback
-        self.on_enter_navigating = self.on_enter_navigating_callback
-        # Agrega aquí más callbacks según sea necesario
-
-    def on_enter_idle_callback(self):
-        print("Drone is now idle.")
-
-    def on_enter_navigating_callback(self):
-        print("Drone is now navigating.")
-
-    # Agrega aquí más métodos de callback según sea necesario
-
-# Crear la interfaz de usuario
 class DroneInterface:
     def __init__(self, master, drone_state_machine):
         self.master = master
         self.drone_state_machine = drone_state_machine
-        master.title("Drone State Machine Simulation")
+        self.master.title("Simulación de Dron")
 
-        # Botones para controlar el dron
-        self.start_flight_button = tk.Button(master, text="Start Flight", command=self.start_flight)
-        self.start_flight_button.pack()
+        self.state_label = tk.Label(master, text="Estado actual: en tierra")
+        self.state_label.pack()
 
-        self.detect_obstacle_button = tk.Button(master, text="Detect Obstacle", command=self.detect_obstacle, state=tk.DISABLED)
-        self.detect_obstacle_button.pack()
+        self.iniciar_vuelo_button = tk.Button(master, text="Iniciar Vuelo", command=self.iniciar_vuelo)
+        self.iniciar_vuelo_button.pack()
 
         # Agrega aquí más botones para otros eventos
 
-    def update_buttons(self):
-        # Actualizar el estado de los botones según el estado del dron
-        if self.drone_state_machine.state == 'navigating':
-            self.detect_obstacle_button['state'] = tk.NORMAL
-        else:
-            self.detect_obstacle_button['state'] = tk.DISABLED
+    def update_state_label(self):
+        self.state_label.config(text=f"Estado actual: {self.drone_state_machine.state}")
 
-        # Agrega aquí más lógica para otros botones
+    def iniciar_vuelo(self):
+        self.drone_state_machine.iniciar_vuelo()
+        messagebox.showinfo("Cambio de Estado", "El dron ha iniciado vuelo")
+        self.update_state_label()
+        # Actualiza la interfaz según el nuevo estado
 
-    def start_flight(self):
-        self.drone_state_machine.start_flight()
-        messagebox.showinfo("Drone Status", "Flight Started")
-        self.update_buttons()
+        # Agrega aquí más métodos para manejar otros eventos
 
-    def detect_obstacle(self):
-        self.drone_state_machine.detect_obstacle()
-        messagebox.showinfo("Drone Status", "Obstacle Detected")
-        self.update_buttons()
-
-    # Agrega aquí más métodos para manejar eventos de botones
-
-# Ejecutar la interfaz
+# Creación de la ventana principal y la máquina de estados
 root = tk.Tk()
 drone_sm = DroneStateMachine()
 app = DroneInterface(root, drone_sm)
+
 root.mainloop()
