@@ -1,33 +1,42 @@
 import tkinter as tk
-# Suponiendo que se ha instalado la biblioteca folium para la visualización de mapas
-import folium
-from io import BytesIO
-from PIL import Image, ImageTk
+from tkinter import messagebox
 
-def report_emergency():
-    # Esta función recogerá los datos de la emergencia del usuario y los enviará al centro de control.
-    pass
-
-def select_location_on_map(event):
-    # Esta función permitirá al usuario seleccionar una ubicación en el mapa y recuperará las coordenadas.
-    pass
+def report_emergency(name, location, emergency_type, beneficiary_name):
+    # Aquí se enviarían los datos al centro de control
+    print(f"Emergencia reportada por {name} en {location}. Tipo: {emergency_type}, Beneficiario: {beneficiary_name}")
+    messagebox.showinfo("Emergencia Reportada", "Tu reporte de emergencia ha sido enviado.")
 
 def start_user_interface():
-    # Esta función debe configurar y mostrar la interfaz de usuario.
     window = tk.Tk()
     window.title('User Emergency Interface')
-    
-    # Añade widgets aquí.
-    label = tk.Label(window, text="This is the User Interface")
-    label.pack()
-    
-    # Inicia el bucle de eventos de Tkinter.
+
+    # Campos de entrada
+    tk.Label(window, text="Nombre:").pack()
+    name_entry = tk.Entry(window)
+    name_entry.pack()
+
+    tk.Label(window, text="Ubicación (coordenadas):").pack()
+    location_entry = tk.Entry(window)
+    location_entry.pack()
+
+    tk.Label(window, text="Tipo de Emergencia:").pack()
+    emergency_type_entry = tk.Entry(window)
+    emergency_type_entry.pack()
+
+    tk.Label(window, text="Nombre del Beneficiario:").pack()
+    beneficiary_name_entry = tk.Entry(window)
+    beneficiary_name_entry.pack()
+
+    # Botón para reportar emergencia
+    report_button = tk.Button(window, text="Reportar Emergencia", 
+                              command=lambda: report_emergency(
+                                  name_entry.get(), 
+                                  location_entry.get(), 
+                                  emergency_type_entry.get(), 
+                                  beneficiary_name_entry.get()))
+    report_button.pack()
+
     window.mainloop()
 
-# GUI setup
-root = tk.Tk()
-root.title("User Emergency Interface")
-
-# Aquí se añadirán widgets para la entrada de datos de emergencia y visualización del mapa.
-
-root.mainloop()
+if __name__ == "__main__":
+    start_user_interface()
