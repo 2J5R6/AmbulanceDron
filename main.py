@@ -23,11 +23,7 @@ def main():
     emergency_data = {}
 
     # Iniciar interfaz de usuario
-    start_user_interface(emergency_data)
-
-    # Verificar si se ha reportado una emergencia antes de iniciar la interfaz de The Center
-    if emergency_data:
-        start_center_interface(the_center, drone_state_machine, emergency_data)
+    start_user_interface(emergency_data, the_center, drone_state_machine)
 
 if __name__ == "__main__":
     main()

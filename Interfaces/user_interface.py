@@ -1,15 +1,16 @@
 import tkinter as tk
 from tkinter import messagebox
+from Interfaces.the_center_interface import start_center_interface
 
-# Función para reportar emergencia
-def report_emergency(name, location, emergency_type, beneficiary_name, emergency_data):
+def report_emergency(name, location, emergency_type, beneficiary_name, emergency_data, the_center, drone_state_machine):
     emergency_data['name'] = name
     emergency_data['location'] = location
     emergency_data['emergency_type'] = emergency_type
     emergency_data['beneficiary_name'] = beneficiary_name
     messagebox.showinfo("Emergencia Reportada", "Tu reporte de emergencia ha sido enviado.")
+    start_center_interface(the_center, drone_state_machine, emergency_data)
 
-def start_user_interface(emergency_data):
+def start_user_interface(emergency_data, the_center, drone_state_machine):
     window = tk.Tk()
     window.title('User Emergency Interface')
 
@@ -37,11 +38,7 @@ def start_user_interface(emergency_data):
                                   location_entry.get(), 
                                   emergency_type_entry.get(), 
                                   beneficiary_name_entry.get(),
-                                  emergency_data))
+                                  emergency_data, the_center, drone_state_machine))
     report_button.pack()
 
     window.mainloop()
-
-if __name__ == "__main__":
-    emergency_data = {}
-    start_user_interface(emergency_data)
