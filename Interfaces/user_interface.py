@@ -12,6 +12,18 @@ def select_location_on_map(event):
     # Esta función permitirá al usuario seleccionar una ubicación en el mapa y recuperará las coordenadas.
     pass
 
+def start_user_interface():
+    # Esta función debe configurar y mostrar la interfaz de usuario.
+    window = tk.Tk()
+    window.title('User Emergency Interface')
+    
+    # Añade widgets aquí.
+    label = tk.Label(window, text="This is the User Interface")
+    label.pack()
+    
+    # Inicia el bucle de eventos de Tkinter.
+    window.mainloop()
+
 # GUI setup
 root = tk.Tk()
 root.title("User Emergency Interface")
