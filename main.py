@@ -19,10 +19,15 @@ def main():
     # Crear la máquina de estados del dron
     drone_state_machine = DroneStateMachine()
     
-    # Iniciar interfaces de usuario y centro de control
-    emergency_data = {}  # Diccionario para almacenar datos de emergencia
+    # Diccionario para almacenar datos de emergencia
+    emergency_data = {}
+
+    # Iniciar interfaz de usuario
     start_user_interface(emergency_data)
-    start_center_interface(the_center, drone_state_machine, emergency_data)
+
+    # Verificar si se ha reportado una emergencia antes de iniciar la interfaz de The Center
+    if emergency_data:
+        start_center_interface(the_center, drone_state_machine, emergency_data)
 
 if __name__ == "__main__":
     main()
