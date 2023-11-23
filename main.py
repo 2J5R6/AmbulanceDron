@@ -9,16 +9,20 @@ def main():
     user = User(name="User1", identification="ID123", location=(0, 0))
     beneficiary = Beneficiary(name="Ben1", identification="ID456", location=(0, 0), medical_condition="Condition")
     the_center = TheCenter()
+
+    # Asegúrate de que 'drones' en TheCenter es una lista
+    if not hasattr(the_center, 'drones') or not isinstance(the_center.drones, list):
+        the_center.drones = []
     
-    # Añadir el dron creado al centro de control
     the_center.drones.append(drone)
     
     # Crear la máquina de estados del dron
     drone_state_machine = DroneStateMachine()
     
     # Iniciar interfaces de usuario y centro de control
-    start_user_interface(user, drone_state_machine)
-    start_center_interface(the_center, drone_state_machine)
+    emergency_data = {}  # Diccionario para almacenar datos de emergencia
+    start_user_interface(emergency_data)
+    start_center_interface(the_center, drone_state_machine, emergency_data)
 
 if __name__ == "__main__":
     main()
